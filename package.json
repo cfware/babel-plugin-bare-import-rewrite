@@ -1,6 +1,6 @@
 {
 	"name": "babel-plugin-bare-import-rewrite",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Babel plugin to rewrite bare imports for browser use.",
 	"main": "index.js",
 	"scripts": {
@@ -10,7 +10,7 @@
 		"nodejs": ">=8"
 	},
 	"author": "Corey Farrell",
-	"license": "MIT",
+	"license": "BSD-3-Clause",
 	"files": [
 		"*.js",
 		"test"

@@ -4,7 +4,7 @@
 [![Greenkeeper badge][gk-image]](https://greenkeeper.io/)
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-[![MIT][license-image]](LICENSE)
+[![BSD-3-Clause][license-image]](LICENSE)
 
 Babel plugin to rewrite bare imports.  In theory this will become obsolete if/when
 browsers get support for import maps.  See [domenic/package-name-maps] for information
@@ -53,6 +53,10 @@ npm install
 npm test
 ```
 
+## Attribution
+
+This module is based on code found in [polymer-build] and [polymer-analyzer].
+
 [npm-image]: https://img.shields.io/npm/v/babel-plugin-bare-import-rewrite.svg
 [npm-url]: https://npmjs.org/package/babel-plugin-bare-import-rewrite
 [travis-image]: https://travis-ci.org/cfware/babel-plugin-bare-import-rewrite.svg?branch=master
@@ -62,3 +66,5 @@ npm test
 [downloads-url]: https://npmjs.org/package/babel-plugin-bare-import-rewrite
 [license-image]: https://img.shields.io/github/license/cfware/babel-plugin-bare-import-rewrite.svg
 [domenic/package-name-maps]: https://github.com/domenic/package-name-maps/
+[polymer-analyzer]: https://github.com/Polymer/tools/blob/219ab4f3f9f8773e75f8c6181109e8966082b9af/packages/analyzer/src/javascript/resolve-specifier-node.ts
+[polymer-build]: https://github.com/Polymer/tools/blob/219ab4f3f9f8773e75f8c6181109e8966082b9af/packages/build/src/babel-plugin-bare-specifiers.ts
