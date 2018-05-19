@@ -64,7 +64,7 @@ This module is based on code found in [polymer-build] and [polymer-analyzer].
 [gk-image]: https://badges.greenkeeper.io/cfware/babel-plugin-bare-import-rewrite.svg
 [downloads-image]: https://img.shields.io/npm/dm/babel-plugin-bare-import-rewrite.svg
 [downloads-url]: https://npmjs.org/package/babel-plugin-bare-import-rewrite
-[license-image]: https://img.shields.io/github/license/cfware/babel-plugin-bare-import-rewrite.svg
+[license-image]: https://img.shields.io/npm/l/babel-plugin-bare-import-rewrite.svg
 [domenic/package-name-maps]: https://github.com/domenic/package-name-maps/
 [polymer-analyzer]: https://github.com/Polymer/tools/blob/219ab4f3f9f8773e75f8c6181109e8966082b9af/packages/analyzer/src/javascript/resolve-specifier-node.ts
 [polymer-build]: https://github.com/Polymer/tools/blob/219ab4f3f9f8773e75f8c6181109e8966082b9af/packages/build/src/babel-plugin-bare-specifiers.ts
