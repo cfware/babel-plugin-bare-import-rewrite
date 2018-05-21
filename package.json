@@ -13,7 +13,7 @@
 	"license": "BSD-3-Clause",
 	"files": [
 		"*.js",
-		"test"
+		"fixtures"
 	],
 	"keywords": [],
 	"repository": {
@@ -27,6 +27,7 @@
 	"dependencies": {
 		"@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.47",
 		"is-windows": "^1.0.2",
+		"minimatch": "^3.0.4",
 		"path-is-inside": "^1.0.2",
 		"resolve": "^1.7.1",
 		"whatwg-url": "^6.4.1"
@@ -38,7 +39,9 @@
 		"@babel/core": "^7.0.0-beta.47",
 		"ava": "^0.25.0",
 		"nyc": "^11.8.0",
-		"xo": "^0.21.1"
+		"xo": "^0.21.1",
+		"@cfware/fake-module1": "file:fixtures/packages/fake-module1@2",
+		"@cfware/fake-module2": "file:fixtures/packages/fake-module2"
 	},
 	"nyc": {
 		"check-coverage": true,

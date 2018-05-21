@@ -9,7 +9,7 @@ Babel plugin to rewrite bare imports.  In theory this will become obsolete if/wh
 browsers get support for import maps.  See [domenic/package-name-maps] for information
 about the proposal.
 
-### Install babel-plugin-bare-import-rewrite
+## Install babel-plugin-bare-import-rewrite
 
 This module requires node.js 8 or above and `@babel/core`.
 
@@ -27,19 +27,71 @@ Add `bare-import-rewrite` to `plugins` in your babel settings.
 {
 	"plugins": [
 		["bare-import-rewrite", {
-			"modulesDir": "/node_modules"
+			"modulesDir": "/node_modules",
+			"rootBaseDir": ".",
+			"alwaysRootImport": []
 		}]
 	]
 }
 ```
 
-`modulesDir` sets the web path which modules will be published from the web server.
-This must always be an absolute directory.  Default "/node_modules".
-
-The plugin settings object can be omitted if defaults are used:
+If the plugin settings object is omitted the defaults are used:
 ```json
 {
 	"plugins": ["bare-import-rewrite"]
+}
+```
+
+### modulesDir
+
+The URL path in which `node_modules` will be published on the web server. This
+must always be an absolute directory without hostname.  Default `"/node_modules"`.
+
+### rootBaseDir
+
+The project base directory.  This should contain the package.json and node_modules
+of the application.  Default `process.cwd()`.
+
+### alwaysRootImport
+
+This contains a list of module bare names which should always be forced to import from
+the root node_modules.  `['**']` can be used to specify that all modules should be
+resolved from the root folder.  No attempt is made to verify that overridden modules
+are compatible.  Each element is used as a pattern to be processed with `minimatch`.
+Default `[]`.
+
+### neverRootImport
+
+This contains a list of module bare names which should never be forced to imported
+from the root node_modules.  Processed with `minimatch`.  Default `[]`.
+
+This example will force all modules to be loaded from the root node_modules except
+for `some-exception`:
+```json
+{
+	"alwaysRootImport": ["**"],
+	"neverRootImport": ["some-exception"]
+}
+```
+
+### `.resolve(importModule, sourceFileName, pluginOptions)` - Resolve absolute path.
+
+This function is used internally by the babel plugin, is exposed so it can be used
+by analyzers to build a list of scripts being imported.  The `pluginOptions` argument
+takes the same values as the babel plugin and uses the same defaults.
+
+```js
+const {resolve} = require('babel-plugin-bare-import-rewrite');
+
+const importModule = '@polymer/lit-element';
+const pluginOptions = {
+	"alwaysRootImport": ["@polymer/*"],
+};
+try {
+	const absPath = resolve(importModule, __filename, pluginOptions);
+	console.log(`The requested module ${importModule} is in ${absPath}.`);
+} catch (e) {
+	console.error(`Cound not resolve ${importModule}:`, e);
 }
 ```
 
