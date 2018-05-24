@@ -7,7 +7,7 @@
 		"test": "xo && nyc ava -s"
 	},
 	"engines": {
-		"nodejs": ">=8"
+		"node": ">=8"
 	},
 	"author": "Corey Farrell",
 	"license": "BSD-3-Clause",
