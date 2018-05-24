@@ -1,7 +1,6 @@
 # babel-plugin-bare-import-rewrite
 
 [![Travis CI][travis-image]][travis-url]
-[![Greenkeeper badge][gk-image]](https://greenkeeper.io/)
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 [![BSD-3-Clause][license-image]](LICENSE)
@@ -61,7 +60,6 @@ This module is based on code found in [polymer-build] and [polymer-analyzer].
 [npm-url]: https://npmjs.org/package/babel-plugin-bare-import-rewrite
 [travis-image]: https://travis-ci.org/cfware/babel-plugin-bare-import-rewrite.svg?branch=master
 [travis-url]: https://travis-ci.org/cfware/babel-plugin-bare-import-rewrite
-[gk-image]: https://badges.greenkeeper.io/cfware/babel-plugin-bare-import-rewrite.svg
 [downloads-image]: https://img.shields.io/npm/dm/babel-plugin-bare-import-rewrite.svg
 [downloads-url]: https://npmjs.org/package/babel-plugin-bare-import-rewrite
 [license-image]: https://img.shields.io/npm/l/babel-plugin-bare-import-rewrite.svg
