@@ -1,0 +1,9 @@
+{
+	"name": "@cfware/fake-module2",
+	"version": "1.0.0",
+	"main": "index.js",
+	"dependencies": {
+		"@cfware/fake-module1": "file:../fake-module1@1",
+		"is-windows": "file:../is-windows"
+	}
+}
