@@ -1,5 +1,7 @@
 # babel-plugin-bare-import-rewrite
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/cfware/babel-plugin-bare-import-rewrite.svg)](https://greenkeeper.io/)
+
 [![Travis CI][travis-image]][travis-url]
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
