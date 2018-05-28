@@ -18,7 +18,7 @@ function babelTest(t, source, result, options = {}) {
 	};
 
 	const {code} = transform(source, {
-		filename: 'file.js',
+		filename: path.join(__dirname, 'file.js'),
 		plugins: [plugin],
 		...options,
 	});
@@ -128,7 +128,7 @@ test('static node package to package with alternate location', t => babelTest(t,
 test('static unresolved node package', t => babelTest(t,
 	`import mod from "@cfware/this-module-will-never-exist";`,
 	`import mod from "@cfware/this-module-will-never-exist";`,
-	{expectErrors: [[`Could not resolve '@cfware/this-module-will-never-exist' in file 'file.js'.`]]}
+	{expectErrors: [[`Could not resolve '@cfware/this-module-will-never-exist' in file '${path.join(__dirname, 'file.js')}'.`]]}
 ));
 
 test('static http url', t => babelTest(t,

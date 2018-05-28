@@ -15,7 +15,12 @@
 		"*.js",
 		"fixtures"
 	],
-	"keywords": [],
+	"keywords": [
+		"babel",
+		"esm",
+		"browser",
+		"import"
+	],
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/cfware/babel-plugin-bare-import-rewrite.git"
