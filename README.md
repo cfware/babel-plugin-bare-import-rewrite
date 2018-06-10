@@ -75,6 +75,10 @@ for `some-exception`:
 }
 ```
 
+### extensions
+
+A list of extensions to use in resolver. Default `['.mjs', '.js', '.json']`.
+
 ### `.resolve(importModule, sourceFileName, pluginOptions)` - Resolve absolute path.
 
 This function is used internally by the babel plugin, is exposed so it can be used

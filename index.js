@@ -45,18 +45,7 @@ function absResolve(importPath, sourceFileName, pluginOptions = {}) {
 
 	return resolve.sync(importPath, {
 		basedir: basedirResolve(importPath, sourceFileName, pluginOptions),
-		/*
-		 * It's invalid to load a .json or .node file as a module on the web,
-		 * but this is what Node's resolution algorithm does
-		 * (https://nodejs.org/api/modules.html#modules_all_together), so we
-		 * also do it here for completeness. Without including these
-		 * extensions the user will probably get a 404. With them, they'll
-		 * probably get an invalid MIME type error (which is hopefully more
-		 * useful).
-		*/
-		extensions: ['.js', '.json', '.node'],
-		/* Some packages use a non-standard alternative to the "main" field
-		 * in their package.json to differentiate their ES module version. */
+		extensions: pluginOptions.extensions || ['.mjs', '.js', 'json'],
 		packageFilter(packageJson) {
 			packageJson.main = packageJson.module ||
 				packageJson['jsnext:main'] || packageJson.main;

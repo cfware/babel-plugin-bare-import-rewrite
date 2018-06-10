@@ -43,7 +43,7 @@
 	"devDependencies": {
 		"@babel/core": "^7.0.0-beta.47",
 		"ava": "^0.25.0",
-		"nyc": "^12.0.1",
+		"nyc": "^12.0.2",
 		"xo": "^0.21.1",
 		"@cfware/fake-module1": "file:fixtures/packages/fake-module1@2",
 		"@cfware/fake-module2": "file:fixtures/packages/fake-module2"
