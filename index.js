@@ -81,7 +81,7 @@ function tryResolve(importPath, sourceFileName, pluginOptions) {
 		}
 
 		return importPathRel;
-	} catch (e) {
+	} catch (error) {
 		console.error(`Could not resolve '${importPath}' in file '${sourceFileName}'.`);
 		return importPath;
 	}
