@@ -125,6 +125,18 @@ test('static node package to package with alternate location', t => babelTest(t,
 	}
 ));
 
+test('static node package with full base URL, trailing slash', t => babelTest(t,
+	'import mod from "is-windows";',
+	'import mod from "https://example.com/node_modules/is-windows/index.js";',
+	{plugins: [[plugin, {modulesDir: 'https://example.com/node_modules/'}]]}
+));
+
+test('static node package with full base URL, no trailing slash', t => babelTest(t,
+	'import mod from "is-windows";',
+	'import mod from "https://example.com/node_modules/is-windows/index.js";',
+	{plugins: [[plugin, {modulesDir: 'https://example.com/node_modules'}]]}
+));
+
 test('static unresolved node package', t => babelTest(t,
 	'import mod from "@cfware/this-module-will-never-exist";',
 	'import mod from "@cfware/this-module-will-never-exist";',

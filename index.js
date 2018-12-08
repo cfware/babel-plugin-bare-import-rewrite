@@ -67,6 +67,11 @@ function tryResolve(importPath, sourceFileName, pluginOptions) {
 		let importPathRel = path.relative(path.dirname(sourceFileName), importPathAbs);
 
 		if (isNodeModule && !fromNodeModule) {
+			const modulesDir = pluginOptions.modulesDir || '/node_modules';
+			if (modulesDir.includes('://')) {
+				return modulesDir + (modulesDir.endsWith('/') ? '' : '/') + path.relative(nodeModules, importPathAbs);
+			}
+
 			importPathRel = path.join(
 				pluginOptions.modulesDir || '/node_modules',
 				path.relative(nodeModules, importPathAbs));
