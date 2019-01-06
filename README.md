@@ -75,6 +75,11 @@ for `some-exception`:
 }
 ```
 
+### fsPath
+
+Setting this option `true` forces use of platform specific path separators.  This
+should generally be used when using absolute filesystem paths for bundling.
+
 ### extensions
 
 A list of extensions to use in resolver. Default `['.mjs', '.js', '.json']`.

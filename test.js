@@ -3,6 +3,8 @@ import test from 'ava';
 import {transform} from '@babel/core';
 import plugin from '.';
 
+const nodeModules = path.resolve(__dirname, 'node_modules');
+
 function babelTest(t, source, result, options = {}) {
 	const origError = console.error;
 	const expectErrors = [];
@@ -122,6 +124,15 @@ test('static node package to package with alternate location', t => babelTest(t,
 	{
 		plugins: [[plugin, {modulesDir: '/assets'}]],
 		filename: 'node_modules/path-is-inside/index.js',
+	}
+));
+
+test('static node package to package with absolute path', t => babelTest(t,
+	'import mod from "is-windows";',
+	`import mod from "${path.join(nodeModules, 'is-windows', 'index.js').replace(/\\/g, '\\\\')}";`,
+	{
+		plugins: [[plugin, {modulesDir: nodeModules, fsPath: true}]],
+		filename: 'index.js',
 	}
 ));
 

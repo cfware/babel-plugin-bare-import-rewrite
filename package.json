@@ -31,7 +31,6 @@
 	"homepage": "https://github.com/cfware/babel-plugin-bare-import-rewrite#readme",
 	"dependencies": {
 		"@babel/plugin-syntax-dynamic-import": "^7.0.0",
-		"is-windows": "^1.0.2",
 		"minimatch": "^3.0.4",
 		"path-is-inside": "^1.0.2",
 		"resolve": "^1.8.1",
@@ -42,7 +41,8 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.0.0",
-		"ava": "^1.0.0-beta.8",
+		"ava": "^1.0.1",
+		"is-windows": "^1.0.2",
 		"nyc": "^13.1.0",
 		"xo": "^0.23.0",
 		"@cfware/fake-module1": "file:fixtures/packages/fake-module1@2",

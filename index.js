@@ -6,10 +6,17 @@ const syntax = require('@babel/plugin-syntax-dynamic-import');
 const whatwgUrl = require('whatwg-url');
 const resolve = require('resolve');
 const pathIsInside = require('path-is-inside');
-const isWindows = require('is-windows');
 const minimatch = require('minimatch');
 
-const isPathSpecifier = str => /^\.{0,2}\//.test(str);
+const isPathSpecifier = str => /^\.{0,2}[/\\]/.test(str);
+const pathToURL = str => {
+	/* istanbul ignore next */
+	if (path.sep === path.win32.sep) {
+		str = str.replace(/\\/g, '/');
+	}
+
+	return str;
+};
 
 function basedirResolve(importPath, sourceFileName, pluginOptions) {
 	const {alwaysRootImport, neverRootImport} = {
@@ -65,24 +72,23 @@ function tryResolve(importPath, sourceFileName, pluginOptions) {
 		const isNodeModule = pathIsInside(importPathAbs, nodeModules);
 		const fromNodeModule = pathIsInside(path.resolve(sourceFileName), nodeModules);
 		let importPathRel = path.relative(path.dirname(sourceFileName), importPathAbs);
+		const sep = pluginOptions.fsPath === true ? path.sep : path.posix.sep;
 
 		if (isNodeModule && !fromNodeModule) {
 			const modulesDir = pluginOptions.modulesDir || '/node_modules';
 			if (modulesDir.includes('://')) {
-				return modulesDir + (modulesDir.endsWith('/') ? '' : '/') + path.relative(nodeModules, importPathAbs);
+				return modulesDir + (modulesDir.endsWith('/') ? '' : '/') + pathToURL(path.relative(nodeModules, importPathAbs));
 			}
 
 			importPathRel = path.join(
 				pluginOptions.modulesDir || '/node_modules',
 				path.relative(nodeModules, importPathAbs));
 		}
-		/* istanbul ignore if */
-		if (isWindows()) {
-			/* Normalize path separators to URL format */
-			importPathRel = importPathRel.replace(/\\/g, '/');
+		if (pluginOptions.fsPath !== true) {
+			importPathRel = pathToURL(importPathRel);
 		}
-		if (!isPathSpecifier(importPathRel)) {
-			importPathRel = './' + importPathRel;
+		if (!isPathSpecifier(importPathRel) && !path.isAbsolute(importPathRel)) {
+			importPathRel = '.' + sep + importPathRel;
 		}
 
 		return importPathRel;
@@ -92,7 +98,7 @@ function tryResolve(importPath, sourceFileName, pluginOptions) {
 	}
 }
 
-module.exports = () => ({
+module.exports = ({types: t}) => ({
 	inherits: syntax.default,
 	visitor: {
 		CallExpression(path, {opts}) {
@@ -100,23 +106,23 @@ module.exports = () => ({
 				return;
 			}
 
-			const [source] = path.node.arguments;
+			const [source] = path.get('arguments');
 			if (source.type !== 'StringLiteral') {
 				/* Should never happen */
 				return;
 			}
 
-			source.value = tryResolve(source.value, path.hub.file.opts.parserOpts.sourceFileName, opts);
+			source.replaceWith(t.stringLiteral(tryResolve(source.node.value, path.hub.file.opts.parserOpts.sourceFileName, opts)));
 		},
 		'ImportDeclaration|ExportNamedDeclaration|ExportAllDeclaration'(path, {opts}) {
-			const {source} = path.node;
+			const source = path.get('source');
 
 			// An export without a 'from' clause
-			if (source === null) {
+			if (source.node === null) {
 				return;
 			}
 
-			source.value = tryResolve(source.value, path.hub.file.opts.parserOpts.sourceFileName, opts);
+			source.replaceWith(t.stringLiteral(tryResolve(source.node.value, path.hub.file.opts.parserOpts.sourceFileName, opts)));
 		},
 	},
 });
