@@ -12,8 +12,7 @@
 	"author": "Corey Farrell",
 	"license": "BSD-3-Clause",
 	"files": [
-		"*.js",
-		"fixtures"
+		"index.js"
 	],
 	"keywords": [
 		"babel",
