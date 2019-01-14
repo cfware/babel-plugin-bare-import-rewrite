@@ -43,7 +43,7 @@
 		"ava": "^1.0.1",
 		"is-windows": "^1.0.2",
 		"nyc": "^13.1.0",
-		"xo": "^0.23.0",
+		"xo": "^0.24.0",
 		"@cfware/fake-module1": "file:fixtures/packages/fake-module1@2",
 		"@cfware/fake-module2": "file:fixtures/packages/fake-module2"
 	},
