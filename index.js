@@ -84,9 +84,11 @@ function tryResolve(importPath, sourceFileName, pluginOptions) {
 				pluginOptions.modulesDir || '/node_modules',
 				path.relative(nodeModules, importPathAbs));
 		}
+
 		if (pluginOptions.fsPath !== true) {
 			importPathRel = pathToURL(importPathRel);
 		}
+
 		if (!isPathSpecifier(importPathRel) && !path.isAbsolute(importPathRel)) {
 			importPathRel = '.' + sep + importPathRel;
 		}

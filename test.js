@@ -14,6 +14,7 @@ function babelTest(t, source, result, options = {}) {
 		expectErrors.push(...options.expectErrors);
 		delete options.expectErrors;
 	}
+
 	t.context.gotErrors = [];
 	console.error = (...msg) => {
 		gotErrors.push(msg);
