@@ -30,7 +30,8 @@ Add `bare-import-rewrite` to `plugins` in your babel settings.
 		["bare-import-rewrite", {
 			"modulesDir": "/node_modules",
 			"rootBaseDir": ".",
-			"alwaysRootImport": []
+			"alwaysRootImport": [],
+			"ignorePrefixes": ["//"]
 		}]
 	]
 }
@@ -79,6 +80,11 @@ for `some-exception`:
 
 Setting this option `true` forces use of platform specific path separators.  This
 should generally be used when using absolute filesystem paths for bundling.
+
+### ignorePrefixes
+
+This option can be set to an array of strings.  Each represents a module name prefix
+to be ignored.
 
 ### extensions
 
