@@ -7,6 +7,7 @@ const whatwgUrl = require('whatwg-url');
 const resolve = require('resolve');
 const pathIsInside = require('path-is-inside');
 const minimatch = require('minimatch');
+const arrify = require('arrify');
 
 const isPathSpecifier = str => /^\.{0,2}[/\\]/.test(str);
 const pathToURL = str => {
@@ -63,6 +64,10 @@ function absResolve(importPath, sourceFileName, pluginOptions = {}) {
 
 function tryResolve(importPath, sourceFileName, pluginOptions) {
 	if (whatwgUrl.parseURL(importPath) !== null) {
+		return importPath;
+	}
+
+	if (arrify(pluginOptions.ignorePrefixes).some(ignore => importPath.startsWith(ignore))) {
 		return importPath;
 	}
 

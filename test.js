@@ -171,6 +171,17 @@ test('static parent dir', t => babelTest(t,
 	{filename: 'fixtures/file.js'}
 ));
 
+test('static ignored path', t => babelTest(t,
+	'import mod from "..";\nimport mod2 from "/src/test.js";',
+	'import mod from "../index.js";\nimport mod2 from "/src/test.js";',
+	{
+		filename: 'fixtures/file.js',
+		plugins: [[plugin, {
+			ignorePrefixes: ['/'],
+		}]],
+	}
+));
+
 test('export without from', t => babelTest(t,
 	'export const id = "id".length();',
 	'export const id = "id".length();'
