@@ -113,28 +113,35 @@ function tryResolve(babelPath, importPath, sourceFileName, pluginOptions) {
 module.exports = ({types: t}) => ({
 	inherits: syntax.default,
 	visitor: {
-		CallExpression(path, {file, opts}) {
-			if (path.node.callee.type !== 'Import') {
-				return;
+		Program: {
+			exit(path, {file, opts}) {
+				path.traverse({
+					CallExpression(path) {
+						if (path.node.callee.type !== 'Import') {
+							return;
+						}
+
+						const [source] = path.get('arguments');
+						if (source.type !== 'StringLiteral') {
+							/* Should never happen */
+							return;
+						}
+
+						source.replaceWith(t.stringLiteral(tryResolve(path, source.node.value, file.opts.parserOpts.sourceFileName, opts)));
+					},
+
+					'ImportDeclaration|ExportNamedDeclaration|ExportAllDeclaration'(path) {
+						const source = path.get('source');
+
+						// An export without a 'from' clause
+						if (source.node === null) {
+							return;
+						}
+
+						source.replaceWith(t.stringLiteral(tryResolve(path, source.node.value, file.opts.parserOpts.sourceFileName, opts)));
+					}
+				});
 			}
-
-			const [source] = path.get('arguments');
-			if (source.type !== 'StringLiteral') {
-				/* Should never happen */
-				return;
-			}
-
-			source.replaceWith(t.stringLiteral(tryResolve(path, source.node.value, file.opts.parserOpts.sourceFileName, opts)));
-		},
-		'ImportDeclaration|ExportNamedDeclaration|ExportAllDeclaration'(path, {file, opts}) {
-			const source = path.get('source');
-
-			// An export without a 'from' clause
-			if (source.node === null) {
-				return;
-			}
-
-			source.replaceWith(t.stringLiteral(tryResolve(path, source.node.value, file.opts.parserOpts.sourceFileName, opts)));
 		}
 	}
 });
