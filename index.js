@@ -108,7 +108,7 @@ function tryResolve(importPath, sourceFileName, pluginOptions) {
 module.exports = ({types: t}) => ({
 	inherits: syntax.default,
 	visitor: {
-		CallExpression(path, {opts}) {
+		CallExpression(path, {file, opts}) {
 			if (path.node.callee.type !== 'Import') {
 				return;
 			}
@@ -119,9 +119,9 @@ module.exports = ({types: t}) => ({
 				return;
 			}
 
-			source.replaceWith(t.stringLiteral(tryResolve(source.node.value, path.hub.file.opts.parserOpts.sourceFileName, opts)));
+			source.replaceWith(t.stringLiteral(tryResolve(source.node.value, file.opts.parserOpts.sourceFileName, opts)));
 		},
-		'ImportDeclaration|ExportNamedDeclaration|ExportAllDeclaration'(path, {opts}) {
+		'ImportDeclaration|ExportNamedDeclaration|ExportAllDeclaration'(path, {file, opts}) {
 			const source = path.get('source');
 
 			// An export without a 'from' clause
@@ -129,7 +129,7 @@ module.exports = ({types: t}) => ({
 				return;
 			}
 
-			source.replaceWith(t.stringLiteral(tryResolve(source.node.value, path.hub.file.opts.parserOpts.sourceFileName, opts)));
+			source.replaceWith(t.stringLiteral(tryResolve(source.node.value, file.opts.parserOpts.sourceFileName, opts)));
 		},
 	},
 });
