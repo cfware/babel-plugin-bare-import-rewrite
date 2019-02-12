@@ -111,6 +111,18 @@ try {
 }
 ```
 
+## Web Server Support
+
+Some web server software has support for live translation of JavaScript sources.  These
+are meant for using during development and testing, a build step should be used to
+produce static translated sources for production deployments.
+
+* [fastify-babel] can be used with [fastify] and [fastify-static]
+* [express-transform-bare-module-specifiers] can be used with [express]
+
+Feel free to open an issue or PR if you know of other node.js servers which can use this
+babel plugin to perform bare import rewrites.
+
 ## Running tests
 
 Tests are provided by xo and ava.
@@ -135,3 +147,8 @@ This module is based on code found in [polymer-build] and [polymer-analyzer].
 [domenic/package-name-maps]: https://github.com/domenic/package-name-maps/
 [polymer-analyzer]: https://github.com/Polymer/tools/blob/219ab4f3f9f8773e75f8c6181109e8966082b9af/packages/analyzer/src/javascript/resolve-specifier-node.ts
 [polymer-build]: https://github.com/Polymer/tools/blob/219ab4f3f9f8773e75f8c6181109e8966082b9af/packages/build/src/babel-plugin-bare-specifiers.ts
+[fastify]: https://github.com/fastify/fastify#readme
+[fastify-static]: https://github.com/fastify/fastify-static#readme
+[fastify-babel]: https://github.com/cfware/fastify-babel#readme
+[express]: https://github.com/expressjs/express#readme
+[express-transform-bare-module-specifiers]: https://github.com/nodecg/express-transform-bare-module-specifiers#readme
