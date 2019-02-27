@@ -4,6 +4,7 @@
 	"description": "Babel plugin to rewrite bare imports for browser use.",
 	"main": "index.js",
 	"scripts": {
+		"release": "standard-version --sign",
 		"test": "xo && nyc ava -s"
 	},
 	"engines": {
@@ -41,12 +42,13 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.0.0",
+		"@cfware/fake-module1": "file:fixtures/packages/fake-module1@2",
+		"@cfware/fake-module2": "file:fixtures/packages/fake-module2",
 		"ava": "^1.0.1",
 		"is-windows": "^1.0.2",
 		"nyc": "^13.1.0",
-		"xo": "^0.24.0",
-		"@cfware/fake-module1": "file:fixtures/packages/fake-module1@2",
-		"@cfware/fake-module2": "file:fixtures/packages/fake-module2"
+		"standard-version": "^5.0.0",
+		"xo": "^0.24.0"
 	},
 	"nyc": {
 		"check-coverage": true,
