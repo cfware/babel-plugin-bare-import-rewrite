@@ -62,7 +62,7 @@ function absResolve(importPath, sourceFileName, pluginOptions = {}) {
 	});
 }
 
-function tryResolve(importPath, sourceFileName, pluginOptions) {
+function tryResolve(babelPath, importPath, sourceFileName, pluginOptions) {
 	if (whatwgUrl.parseURL(importPath) !== null) {
 		return importPath;
 	}
@@ -100,8 +100,12 @@ function tryResolve(importPath, sourceFileName, pluginOptions) {
 
 		return importPathRel;
 	} catch (error) {
-		console.error(`Could not resolve '${importPath}' in file '${sourceFileName}'.`);
-		return importPath;
+		if (pluginOptions.failOnUnresolved) {
+			throw babelPath.buildCodeFrameError(`Could not resolve '${importPath}'.`);
+		} else {
+			console.error(`Could not resolve '${importPath}' in file '${sourceFileName}'.`);
+			return importPath;
+		}
 	}
 }
 
@@ -119,7 +123,7 @@ module.exports = ({types: t}) => ({
 				return;
 			}
 
-			source.replaceWith(t.stringLiteral(tryResolve(source.node.value, file.opts.parserOpts.sourceFileName, opts)));
+			source.replaceWith(t.stringLiteral(tryResolve(path, source.node.value, file.opts.parserOpts.sourceFileName, opts)));
 		},
 		'ImportDeclaration|ExportNamedDeclaration|ExportAllDeclaration'(path, {file, opts}) {
 			const source = path.get('source');
@@ -129,7 +133,7 @@ module.exports = ({types: t}) => ({
 				return;
 			}
 
-			source.replaceWith(t.stringLiteral(tryResolve(source.node.value, file.opts.parserOpts.sourceFileName, opts)));
+			source.replaceWith(t.stringLiteral(tryResolve(path, source.node.value, file.opts.parserOpts.sourceFileName, opts)));
 		},
 	},
 });

@@ -20,15 +20,24 @@ function babelTest(t, source, result, options = {}) {
 		gotErrors.push(msg);
 	};
 
-	const {code} = transform(source, {
-		filename: path.join(__dirname, 'file.js'),
-		plugins: [plugin],
-		...options,
-	});
+	try {
+		const {code} = transform(source, {
+			filename: path.join(__dirname, 'file.js'),
+			plugins: [plugin],
+			...options,
+		});
 
-	t.deepEqual(gotErrors, expectErrors);
-	t.is(code, result);
-	console.error = origError;
+		t.deepEqual(gotErrors, expectErrors);
+		t.is(code, result);
+		console.error = origError;
+	} catch (error) {
+		if (options.plugins[0][1].failOnUnresolved) {
+			t.true(error instanceof Error);
+			return;
+		}
+
+		throw error;
+	}
 }
 
 test('exports', t => {
@@ -155,6 +164,12 @@ test('static unresolved node package', t => babelTest(t,
 	{expectErrors: [[`Could not resolve '@cfware/this-module-will-never-exist' in file '${path.join(__dirname, 'file.js')}'.`]]}
 ));
 
+test('static unresolved node package, failOnUnresolved', t => babelTest(t,
+	'import mod from "@cfware/this-module-will-never-exist";',
+	'import mod from "@cfware/this-module-will-never-exist";',
+	{plugins: [[plugin, {failOnUnresolved: true}]]}
+));
+
 test('static http url', t => babelTest(t,
 	'import mod from "http://example.com/";',
 	'import mod from "http://example.com/";'
@@ -196,6 +211,12 @@ test('dynamic parent dir', t => babelTest(t,
 	'const mod = import("..");',
 	'const mod = import("../index.js");',
 	{filename: 'fixtures/file.js'}
+));
+
+test('dynamic unresolved node package, failOnUnresolved', t => babelTest(t,
+	'import("@cfware/this-module-will-never-exist");',
+	'import("@cfware/this-module-will-never-exist");',
+	{plugins: [[plugin, {failOnUnresolved: true}]]}
 ));
 
 test('dynamic invalid', t => babelTest(t,
