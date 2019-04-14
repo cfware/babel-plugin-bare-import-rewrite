@@ -1,6 +1,6 @@
 {
 	"name": "babel-plugin-bare-import-rewrite",
-	"version": "1.3.2",
+	"version": "1.4.0",
 	"description": "Babel plugin to rewrite bare imports for browser use.",
 	"main": "index.js",
 	"scripts": {
