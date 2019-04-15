@@ -48,8 +48,9 @@ If the plugin settings object is omitted the defaults are used:
 
 ### modulesDir
 
-The URL path in which `node_modules` will be published on the web server. This
-must always be an absolute directory without hostname.  Default `"/node_modules"`.
+The URL path in which files from the `node_modules` directory will be published on
+the web server. This must always be an absolute URL (with or without hostname).
+Default "/node_modules".
 
 ### rootBaseDir
 
@@ -85,7 +86,9 @@ Setting this option to true will fail babel compilation with details.
 
 ### resolveDirectories
 
-Directories which should be search for resolving modules. Defaults to node_modules.
+Array of directories which should be search for resolving modules. If multiple directories are specified they
+are evaluated in order of importance. If the same module exists in both folders, the leftmost module directory is
+always taken. Defaults to `['node_modules']`.
 
 ### fsPath
 
