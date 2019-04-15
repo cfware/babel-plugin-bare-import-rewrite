@@ -33,6 +33,7 @@ Add `bare-import-rewrite` to `plugins` in your babel settings.
 			"alwaysRootImport": [],
 			"ignorePrefixes": ["//"],
 			"failOnUnresolved": false,
+			"resolveDirectories": ["node_modules"]
 		}]
 	]
 }
@@ -81,6 +82,10 @@ for `some-exception`:
 
 By default an error is logged when an import could not be resolved, but it does not fail babel compilation.
 Setting this option to true will fail babel compilation with details.
+
+### resolveDirectories
+
+Directories which should be search for resolving modules. Defaults to node_modules.
 
 ### fsPath
 

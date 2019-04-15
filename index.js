@@ -54,6 +54,7 @@ function absResolve(importPath, sourceFileName, pluginOptions = {}) {
 	return resolve.sync(importPath, {
 		basedir: basedirResolve(importPath, sourceFileName, pluginOptions),
 		extensions: pluginOptions.extensions || ['.mjs', '.js', 'json'],
+		moduleDirectory: pluginOptions.resolveDirectories || 'node_modules',
 		packageFilter(packageJson) {
 			packageJson.main = packageJson.module ||
 				packageJson['jsnext:main'] || packageJson.main;
