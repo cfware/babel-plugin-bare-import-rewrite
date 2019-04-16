@@ -88,6 +88,38 @@ test('static node package', t => babelTest(t,
 	'import mod from "/node_modules/@cfware/fake-module1/index.js";'
 ));
 
+test('static package from resolve directory A', t => babelTest(t,
+	'import mod from "my-module/foo";',
+	'import mod from "./fixtures/my-modules/my-module/foo.js";',
+	{
+		plugins: [[plugin, {
+			resolveDirectories: ['fixtures/my-modules', 'node_modules'],
+		}]],
+	}
+));
+
+test('static package from resolve directory A imported by a file in resolve directory A', t => babelTest(t,
+	'import mod from "my-module/foo";',
+	'import mod from "../my-module/foo.js";',
+	{
+		filename: 'fixtures/my-modules/my-other-module/foo.js',
+		plugins: [[plugin, {
+			resolveDirectories: ['fixtures/my-modules', 'node_modules'],
+		}]],
+	}
+));
+
+test('static package from resolve directory B imported by a file in resolve directory A', t => babelTest(t,
+	'import mod from "@cfware/fake-module1";',
+	'import mod from "/node_modules/@cfware/fake-module1/index.js";',
+	{
+		filename: 'fixtures/my-modules/my-other-module/foo.js',
+		plugins: [[plugin, {
+			resolveDirectories: ['fixtures/my-modules', 'node_modules'],
+		}]],
+	}
+));
+
 test('static node subpackage', t => babelTest(t,
 	'import mod from "@cfware/fake-module1";',
 	'import mod from "./node_modules/@cfware/fake-module1/index.js";',
