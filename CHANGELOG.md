@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [1.5.0](https://github.com/cfware/babel-plugin-bare-import-rewrite/compare/v1.4.0...v1.5.0) (2019-04-16)
+
+
+### Features
+
+* add resolveDirectories option ([#16](https://github.com/cfware/babel-plugin-bare-import-rewrite/issues/16)) ([d648fc7](https://github.com/cfware/babel-plugin-bare-import-rewrite/commit/d648fc7))
+
+
+
 # [1.4.0](https://github.com/cfware/babel-plugin-bare-import-rewrite/compare/v1.3.2...v1.4.0) (2019-04-14)
 
 
