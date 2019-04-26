@@ -30,33 +30,26 @@
 	},
 	"homepage": "https://github.com/cfware/babel-plugin-bare-import-rewrite#readme",
 	"dependencies": {
-		"@babel/plugin-syntax-dynamic-import": "^7.0.0",
-		"arrify": "^2.0.0",
+		"@babel/plugin-syntax-dynamic-import": "^7.2.0",
+		"arrify": "^2.0.1",
 		"minimatch": "^3.0.4",
 		"path-is-inside": "^1.0.2",
-		"resolve": "^1.8.1",
+		"resolve": "^1.10.1",
 		"whatwg-url": "^7.0.0"
 	},
 	"peerDependencies": {
-		"@babel/core": "^7.0.0"
+		"@babel/core": "^7.4.4"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.0.0",
+		"@babel/core": "^7.4.4",
 		"@cfware/fake-module1": "file:test/fixtures/packages/fake-module1@2",
 		"@cfware/fake-module2": "file:test/fixtures/packages/fake-module2",
-		"ava": "^1.0.1",
+		"@cfware/nyc": "^0.4.2",
+		"ava": "^1.4.1",
 		"is-windows": "^1.0.2",
-		"nyc": "^14.0.0",
-		"standard-version": "^5.0.0",
+		"nyc": "^14.1.0",
+		"standard-version": "^5.0.2",
 		"xo": "^0.24.0"
-	},
-	"nyc": {
-		"check-coverage": true,
-		"per-file": true,
-		"lines": 100,
-		"statements": 100,
-		"functions": 100,
-		"branches": 100
 	},
 	"xo": {
 		"rules": {
