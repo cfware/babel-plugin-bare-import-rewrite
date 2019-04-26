@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"release": "standard-version --sign",
-		"test": "xo && nyc ava -s"
+		"test": "xo && nyc ava"
 	},
 	"engines": {
 		"node": ">=8"
@@ -42,8 +42,8 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.0.0",
-		"@cfware/fake-module1": "file:fixtures/packages/fake-module1@2",
-		"@cfware/fake-module2": "file:fixtures/packages/fake-module2",
+		"@cfware/fake-module1": "file:test/fixtures/packages/fake-module1@2",
+		"@cfware/fake-module2": "file:test/fixtures/packages/fake-module2",
 		"ava": "^1.0.1",
 		"is-windows": "^1.0.2",
 		"nyc": "^14.0.0",
@@ -56,11 +56,7 @@
 		"lines": 100,
 		"statements": 100,
 		"functions": 100,
-		"branches": 100,
-		"include": [
-			"*.js",
-			"!test.js"
-		]
+		"branches": 100
 	},
 	"xo": {
 		"rules": {

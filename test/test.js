@@ -1,9 +1,10 @@
 import path from 'path';
 import test from 'ava';
 import {transform} from '@babel/core';
-import plugin from '.';
+import plugin from '..';
 
-const nodeModules = path.resolve(__dirname, 'node_modules');
+const projectDir = path.resolve(__dirname, '..');
+const nodeModules = path.resolve(projectDir, 'node_modules');
 
 function babelTest(t, source, result, options = {}) {
 	const origError = console.error;
@@ -22,7 +23,7 @@ function babelTest(t, source, result, options = {}) {
 
 	try {
 		const {code} = transform(source, {
-			filename: path.join(__dirname, 'file.js'),
+			filename: path.join(projectDir, 'file.js'),
 			plugins: [plugin],
 			...options,
 		});
@@ -46,9 +47,9 @@ test('exports', t => {
 });
 
 test('absolute resolve', t => {
-	const rootIndex = path.resolve(__dirname, 'index.js');
-	const fakeModule1 = path.join(__dirname, 'node_modules/@cfware/fake-module1/index.js');
-	const fakeModule2 = path.join(__dirname, 'node_modules/@cfware/fake-module2/index.js');
+	const rootIndex = path.resolve(projectDir, 'index.js');
+	const fakeModule1 = path.join(projectDir, 'node_modules/@cfware/fake-module1/index.js');
+	const fakeModule2 = path.join(projectDir, 'node_modules/@cfware/fake-module2/index.js');
 	const fakeSubModule1 = path.join(path.dirname(fakeModule2), 'node_modules/@cfware/fake-module1/index.js');
 	const isWindowsSub = path.join(path.dirname(fakeModule2), 'node_modules/is-windows/index.js');
 	const isWindows = require.resolve('is-windows');
@@ -57,7 +58,7 @@ test('absolute resolve', t => {
 	t.is(plugin.resolve('http://example.com/', rootIndex), 'http://example.com/');
 
 	/* Find modules from root index.js */
-	t.is(plugin.resolve('./test.js', rootIndex), path.resolve(__dirname, 'test.js'));
+	t.is(plugin.resolve('./test/test.js', rootIndex), path.resolve(projectDir, 'test', 'test.js'));
 	t.is(plugin.resolve('@cfware/fake-module1', rootIndex), fakeModule1);
 	t.is(plugin.resolve('@cfware/fake-module2', rootIndex), fakeModule2);
 
@@ -90,10 +91,10 @@ test('static node package', t => babelTest(t,
 
 test('static package from resolve directory A', t => babelTest(t,
 	'import mod from "my-module/foo";',
-	'import mod from "./fixtures/my-modules/my-module/foo.js";',
+	'import mod from "./test/fixtures/my-modules/my-module/foo.js";',
 	{
 		plugins: [[plugin, {
-			resolveDirectories: ['fixtures/my-modules', 'node_modules'],
+			resolveDirectories: ['test/fixtures/my-modules', 'node_modules'],
 		}]],
 	}
 ));
@@ -102,9 +103,9 @@ test('static package from resolve directory A imported by a file in resolve dire
 	'import mod from "my-module/foo";',
 	'import mod from "../my-module/foo.js";',
 	{
-		filename: 'fixtures/my-modules/my-other-module/foo.js',
+		filename: 'test/fixtures/my-modules/my-other-module/foo.js',
 		plugins: [[plugin, {
-			resolveDirectories: ['fixtures/my-modules', 'node_modules'],
+			resolveDirectories: ['test/fixtures/my-modules', 'node_modules'],
 		}]],
 	}
 ));
@@ -113,9 +114,9 @@ test('static package from resolve directory B imported by a file in resolve dire
 	'import mod from "@cfware/fake-module1";',
 	'import mod from "/node_modules/@cfware/fake-module1/index.js";',
 	{
-		filename: 'fixtures/my-modules/my-other-module/foo.js',
+		filename: 'test/fixtures/my-modules/my-other-module/foo.js',
 		plugins: [[plugin, {
-			resolveDirectories: ['fixtures/my-modules', 'node_modules'],
+			resolveDirectories: ['test/fixtures/my-modules', 'node_modules'],
 		}]],
 	}
 ));
@@ -193,7 +194,7 @@ test('static node package with full base URL, no trailing slash', t => babelTest
 test('static unresolved node package', t => babelTest(t,
 	'import mod from "@cfware/this-module-will-never-exist";',
 	'import mod from "@cfware/this-module-will-never-exist";',
-	{expectErrors: [[`Could not resolve '@cfware/this-module-will-never-exist' in file '${path.join(__dirname, 'file.js')}'.`]]}
+	{expectErrors: [[`Could not resolve '@cfware/this-module-will-never-exist' in file '${path.join(projectDir, 'file.js')}'.`]]}
 ));
 
 test('static unresolved node package, failOnUnresolved', t => babelTest(t,
@@ -215,14 +216,14 @@ test('static current dir', t => babelTest(t,
 test('static parent dir', t => babelTest(t,
 	'import mod from "..";',
 	'import mod from "../index.js";',
-	{filename: 'fixtures/file.js'}
+	{filename: 'test/test.js'}
 ));
 
 test('static ignored path', t => babelTest(t,
 	'import mod from "..";\nimport mod2 from "/src/test.js";',
 	'import mod from "../index.js";\nimport mod2 from "/src/test.js";',
 	{
-		filename: 'fixtures/file.js',
+		filename: 'test/test.js',
 		plugins: [[plugin, {
 			ignorePrefixes: ['/'],
 		}]],
@@ -242,7 +243,7 @@ test('dynamic current dir', t => babelTest(t,
 test('dynamic parent dir', t => babelTest(t,
 	'const mod = import("..");',
 	'const mod = import("../index.js");',
-	{filename: 'fixtures/file.js'}
+	{filename: 'test/test.js'}
 ));
 
 test('dynamic unresolved node package, failOnUnresolved', t => babelTest(t,
