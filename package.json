@@ -50,13 +50,5 @@
 		"nyc": "^14.1.0",
 		"standard-version": "^5.0.2",
 		"xo": "^0.24.0"
-	},
-	"xo": {
-		"rules": {
-			"comma-dangle": [
-				"error",
-				"always-multiline"
-			]
-		}
 	}
 }

@@ -23,7 +23,7 @@ function basedirResolve(importPath, sourceFileName, pluginOptions) {
 	const {alwaysRootImport, neverRootImport} = {
 		alwaysRootImport: [],
 		neverRootImport: [],
-		...pluginOptions,
+		...pluginOptions
 	};
 	const sourceDirName = path.dirname(sourceFileName);
 
@@ -59,7 +59,7 @@ function absResolve(importPath, sourceFileName, pluginOptions = {}) {
 			packageJson.main = packageJson.module ||
 				packageJson['jsnext:main'] || packageJson.main;
 			return packageJson;
-		},
+		}
 	});
 }
 
@@ -135,7 +135,7 @@ module.exports = ({types: t}) => ({
 			}
 
 			source.replaceWith(t.stringLiteral(tryResolve(path, source.node.value, file.opts.parserOpts.sourceFileName, opts)));
-		},
-	},
+		}
+	}
 });
 module.exports.resolve = absResolve;

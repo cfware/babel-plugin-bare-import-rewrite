@@ -25,7 +25,7 @@ function babelTest(t, source, result, options = {}) {
 		const {code} = transform(source, {
 			filename: path.join(projectDir, 'file.js'),
 			plugins: [plugin],
-			...options,
+			...options
 		});
 
 		t.deepEqual(gotErrors, expectErrors);
@@ -72,7 +72,7 @@ test('absolute resolve', t => {
 	/* Avoid submodules all except */
 	t.is(plugin.resolve('@cfware/fake-module1', fakeModule2, {
 		alwaysRootImport: ['**'],
-		neverRootImport: ['@cfware/fake-module1'],
+		neverRootImport: ['@cfware/fake-module1']
 	}), fakeSubModule1);
 
 	/* Avoid non-empty submodule list but not matching import */
@@ -94,8 +94,8 @@ test('static package from resolve directory A', t => babelTest(t,
 	'import mod from "./test/fixtures/my-modules/my-module/foo.js";',
 	{
 		plugins: [[plugin, {
-			resolveDirectories: ['test/fixtures/my-modules', 'node_modules'],
-		}]],
+			resolveDirectories: ['test/fixtures/my-modules', 'node_modules']
+		}]]
 	}
 ));
 
@@ -105,8 +105,8 @@ test('static package from resolve directory A imported by a file in resolve dire
 	{
 		filename: 'test/fixtures/my-modules/my-other-module/foo.js',
 		plugins: [[plugin, {
-			resolveDirectories: ['test/fixtures/my-modules', 'node_modules'],
-		}]],
+			resolveDirectories: ['test/fixtures/my-modules', 'node_modules']
+		}]]
 	}
 ));
 
@@ -116,8 +116,8 @@ test('static package from resolve directory B imported by a file in resolve dire
 	{
 		filename: 'test/fixtures/my-modules/my-other-module/foo.js',
 		plugins: [[plugin, {
-			resolveDirectories: ['test/fixtures/my-modules', 'node_modules'],
-		}]],
+			resolveDirectories: ['test/fixtures/my-modules', 'node_modules']
+		}]]
 	}
 ));
 
@@ -133,8 +133,8 @@ test('static node ignore specific subpackage', t => babelTest(t,
 	{
 		filename: 'node_modules/@cfware/fake-module2/index.js',
 		plugins: [[plugin, {
-			alwaysRootImport: ['@cfware/fake-module1'],
-		}]],
+			alwaysRootImport: ['@cfware/fake-module1']
+		}]]
 	}
 ));
 
@@ -144,8 +144,8 @@ test('static node ignore specific subpackage from subdir', t => babelTest(t,
 	{
 		filename: 'node_modules/@cfware/fake-module2/subdir/index.js',
 		plugins: [[plugin, {
-			alwaysRootImport: ['@cfware/fake-module1'],
-		}]],
+			alwaysRootImport: ['@cfware/fake-module1']
+		}]]
 	}
 ));
 
@@ -166,7 +166,7 @@ test('static node package to package with alternate location', t => babelTest(t,
 	'import mod from "../is-windows/index.js";',
 	{
 		plugins: [[plugin, {modulesDir: '/assets'}]],
-		filename: 'node_modules/path-is-inside/index.js',
+		filename: 'node_modules/path-is-inside/index.js'
 	}
 ));
 
@@ -175,7 +175,7 @@ test('static node package to package with absolute path', t => babelTest(t,
 	`import mod from "${path.join(nodeModules, 'is-windows', 'index.js').replace(/\\/g, '\\\\')}";`,
 	{
 		plugins: [[plugin, {modulesDir: nodeModules, fsPath: true}]],
-		filename: 'index.js',
+		filename: 'index.js'
 	}
 ));
 
@@ -225,8 +225,8 @@ test('static ignored path', t => babelTest(t,
 	{
 		filename: 'test/test.js',
 		plugins: [[plugin, {
-			ignorePrefixes: ['/'],
-		}]],
+			ignorePrefixes: ['/']
+		}]]
 	}
 ));
 
