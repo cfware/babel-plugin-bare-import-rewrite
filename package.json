@@ -45,7 +45,7 @@
 		"@cfware/fake-module1": "file:test/fixtures/packages/fake-module1@2",
 		"@cfware/fake-module2": "file:test/fixtures/packages/fake-module2",
 		"@cfware/nyc": "^0.4.2",
-		"ava": "^1.4.1",
+		"ava": "^2.0.0",
 		"is-windows": "^1.0.2",
 		"nyc": "^14.1.0",
 		"standard-version": "^6.0.1",
