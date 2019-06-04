@@ -44,7 +44,7 @@
 		"@babel/core": "^7.4.4",
 		"@cfware/fake-module1": "file:test/fixtures/packages/fake-module1@2",
 		"@cfware/fake-module2": "file:test/fixtures/packages/fake-module2",
-		"@cfware/nyc": "^0.4.2",
+		"@cfware/nyc": "^0.5.0",
 		"ava": "^1.4.1",
 		"is-windows": "^1.0.2",
 		"nyc": "^14.1.0",
