@@ -91,10 +91,10 @@ test('static node package', t => babelTest(t,
 
 test('static package from resolve directory A', t => babelTest(t,
 	'import mod from "my-module/foo";',
-	'import mod from "./test/fixtures/my-modules/my-module/foo.js";',
+	'import mod from "./fixtures/my-modules/my-module/foo.js";',
 	{
 		plugins: [[plugin, {
-			resolveDirectories: ['test/fixtures/my-modules', 'node_modules']
+			resolveDirectories: ['fixtures/my-modules', 'node_modules']
 		}]]
 	}
 ));
@@ -103,9 +103,9 @@ test('static package from resolve directory A imported by a file in resolve dire
 	'import mod from "my-module/foo";',
 	'import mod from "../my-module/foo.js";',
 	{
-		filename: 'test/fixtures/my-modules/my-other-module/foo.js',
+		filename: 'fixtures/my-modules/my-other-module/foo.js',
 		plugins: [[plugin, {
-			resolveDirectories: ['test/fixtures/my-modules', 'node_modules']
+			resolveDirectories: ['fixtures/my-modules', 'node_modules']
 		}]]
 	}
 ));
@@ -114,9 +114,9 @@ test('static package from resolve directory B imported by a file in resolve dire
 	'import mod from "@cfware/fake-module1";',
 	'import mod from "/node_modules/@cfware/fake-module1/index.js";',
 	{
-		filename: 'test/fixtures/my-modules/my-other-module/foo.js',
+		filename: 'fixtures/my-modules/my-other-module/foo.js',
 		plugins: [[plugin, {
-			resolveDirectories: ['test/fixtures/my-modules', 'node_modules']
+			resolveDirectories: ['fixtures/my-modules', 'node_modules']
 		}]]
 	}
 ));
