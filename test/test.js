@@ -179,6 +179,15 @@ test('static node package to package with absolute path', t => babelTest(t,
 	}
 ));
 
+test('static node package to package with fsPath but no modulesDir specified', t => babelTest(t,
+	'import mod from "is-windows";',
+	`import mod from "${path.join(nodeModules, 'is-windows', 'index.js').replace(/\\/g, '\\\\')}";`,
+	{
+		plugins: [[plugin, {fsPath: true}]],
+		filename: 'index.js'
+	}
+));
+
 test('static node package with full base URL, trailing slash', t => babelTest(t,
 	'import mod from "is-windows";',
 	'import mod from "https://example.com/node_modules/is-windows/index.js";',

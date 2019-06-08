@@ -81,13 +81,13 @@ function tryResolve(babelPath, importPath, sourceFileName, pluginOptions) {
 		const sep = pluginOptions.fsPath === true ? path.sep : path.posix.sep;
 
 		if (isNodeModule && !fromNodeModule) {
-			const modulesDir = pluginOptions.modulesDir || '/node_modules';
+			const modulesDir = pluginOptions.modulesDir || (pluginOptions.fsPath === true ? nodeModules : '/node_modules');
 			if (modulesDir.includes('://')) {
 				return modulesDir + (modulesDir.endsWith('/') ? '' : '/') + pathToURL(path.relative(nodeModules, importPathAbs));
 			}
 
 			importPathRel = path.join(
-				pluginOptions.modulesDir || '/node_modules',
+				modulesDir,
 				path.relative(nodeModules, importPathAbs));
 		}
 

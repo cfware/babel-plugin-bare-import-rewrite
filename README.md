@@ -92,7 +92,8 @@ always taken. Defaults to `['node_modules']`.
 
 ### fsPath
 
-Setting this option `true` forces use of platform specific path separators.  This
+Setting this option `true` forces use of platform specific path separators.  This changes
+the default value of `modulesDir` to the absolute filesystem path of `node_modules`.  This
 should generally be used when using absolute filesystem paths for bundling.
 
 ### ignorePrefixes
