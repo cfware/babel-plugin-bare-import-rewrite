@@ -1,10 +1,11 @@
 import path from 'path';
 import test from 'ava';
 import {transform} from '@babel/core';
-import plugin from '..';
+import plugin from '../index.js';
 
 const projectDir = path.resolve(__dirname, '..');
 const nodeModules = path.resolve(projectDir, 'node_modules');
+const nodeModulesRelative = path.join('.', 'node_modules');
 
 function babelTest(t, source, result, options = {}) {
 	const origError = console.error;
@@ -86,7 +87,7 @@ test('absolute resolve', t => {
 
 test('static node package', t => babelTest(t,
 	'import mod from "@cfware/fake-module1";',
-	'import mod from "/node_modules/@cfware/fake-module1/index.js";'
+	'import mod from "./node_modules/@cfware/fake-module1/index.js";'
 ));
 
 test('static package from resolve directory A', t => babelTest(t,
@@ -112,7 +113,7 @@ test('static package from resolve directory A imported by a file in resolve dire
 
 test('static package from resolve directory B imported by a file in resolve directory A', t => babelTest(t,
 	'import mod from "@cfware/fake-module1";',
-	'import mod from "/node_modules/@cfware/fake-module1/index.js";',
+	'import mod from "../../../node_modules/@cfware/fake-module1/index.js";',
 	{
 		filename: 'fixtures/my-modules/my-other-module/foo.js',
 		plugins: [[plugin, {
@@ -181,7 +182,7 @@ test('static node package to package with absolute path', t => babelTest(t,
 
 test('static node package to package with fsPath but no modulesDir specified', t => babelTest(t,
 	'import mod from "is-windows";',
-	`import mod from "${path.join(nodeModules, 'is-windows', 'index.js').replace(/\\/g, '\\\\')}";`,
+	`import mod from ".${(path.sep + path.join(nodeModulesRelative, 'is-windows', 'index.js')).replace(/\\/g, '\\\\')}";`,
 	{
 		plugins: [[plugin, {fsPath: true}]],
 		filename: 'index.js'

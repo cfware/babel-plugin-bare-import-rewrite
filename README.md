@@ -49,8 +49,8 @@ If the plugin settings object is omitted the defaults are used:
 ### modulesDir
 
 The URL path in which files from the `node_modules` directory will be published on
-the web server. This must always be an absolute URL (with or without hostname).
-Default "/node_modules".
+the web server. This must be an absolute URL if provided (with or without hostname).
+Default undefined.
 
 ### rootBaseDir
 
