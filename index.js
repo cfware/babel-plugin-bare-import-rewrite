@@ -80,8 +80,8 @@ function tryResolve(babelPath, importPath, sourceFileName, pluginOptions) {
 		let importPathRel = path.relative(path.dirname(sourceFileName), importPathAbs);
 		const sep = pluginOptions.fsPath === true ? path.sep : path.posix.sep;
 
-		if (isNodeModule && !fromNodeModule) {
-			const modulesDir = pluginOptions.modulesDir || (pluginOptions.fsPath === true ? nodeModules : '/node_modules');
+		const {modulesDir} = pluginOptions;
+		if (modulesDir && isNodeModule && !fromNodeModule) {
 			if (modulesDir.includes('://')) {
 				return modulesDir + (modulesDir.endsWith('/') ? '' : '/') + pathToURL(path.relative(nodeModules, importPathAbs));
 			}
