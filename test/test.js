@@ -7,17 +7,10 @@ const projectDir = path.resolve(__dirname, '..');
 const nodeModules = path.resolve(projectDir, 'node_modules');
 const nodeModulesRelative = path.join('.', 'node_modules');
 
-function babelTest(t, source, result, options = {}) {
+function babelTest(t, {source, result, options = {}, expectErrors = []}) {
 	const origError = console.error;
-	const expectErrors = [];
 	const gotErrors = [];
 
-	if (Array.isArray(options.expectErrors)) {
-		expectErrors.push(...options.expectErrors);
-		delete options.expectErrors;
-	}
-
-	t.context.gotErrors = [];
 	console.error = (...msg) => {
 		gotErrors.push(msg);
 	};
@@ -85,184 +78,186 @@ test('absolute resolve', t => {
 	t.is(plugin.resolve('is-windows', fakeModule2, {alwaysRootImport: ['**']}), isWindows);
 });
 
-test('static node package', t => babelTest(t,
-	'import mod from "@cfware/fake-module1";',
-	'import mod from "./node_modules/@cfware/fake-module1/index.js";'
-));
+test('static node package', babelTest, {
+	source: 'import mod from "@cfware/fake-module1";',
+	result: 'import mod from "./node_modules/@cfware/fake-module1/index.js";'
+});
 
-test('static package from resolve directory A', t => babelTest(t,
-	'import mod from "my-module/foo";',
-	'import mod from "./fixtures/my-modules/my-module/foo.js";',
-	{
+test('static package from resolve directory A', babelTest, {
+	source: 'import mod from "my-module/foo";',
+	result: 'import mod from "./fixtures/my-modules/my-module/foo.js";',
+	options: {
 		plugins: [[plugin, {
 			resolveDirectories: ['fixtures/my-modules', 'node_modules']
 		}]]
 	}
-));
+});
 
-test('static package from resolve directory A imported by a file in resolve directory A', t => babelTest(t,
-	'import mod from "my-module/foo";',
-	'import mod from "../my-module/foo.js";',
-	{
+test('static package from resolve directory A imported by a file in resolve directory A', babelTest, {
+	source: 'import mod from "my-module/foo";',
+	result: 'import mod from "../my-module/foo.js";',
+	options: {
 		filename: 'fixtures/my-modules/my-other-module/foo.js',
 		plugins: [[plugin, {
 			resolveDirectories: ['fixtures/my-modules', 'node_modules']
 		}]]
 	}
-));
+});
 
-test('static package from resolve directory B imported by a file in resolve directory A', t => babelTest(t,
-	'import mod from "@cfware/fake-module1";',
-	'import mod from "../../../node_modules/@cfware/fake-module1/index.js";',
-	{
+test('static package from resolve directory B imported by a file in resolve directory A', babelTest, {
+	source: 'import mod from "@cfware/fake-module1";',
+	result: 'import mod from "../../../node_modules/@cfware/fake-module1/index.js";',
+	options: {
 		filename: 'fixtures/my-modules/my-other-module/foo.js',
 		plugins: [[plugin, {
 			resolveDirectories: ['fixtures/my-modules', 'node_modules']
 		}]]
 	}
-));
+});
 
-test('static node subpackage', t => babelTest(t,
-	'import mod from "@cfware/fake-module1";',
-	'import mod from "./node_modules/@cfware/fake-module1/index.js";',
-	{filename: 'node_modules/@cfware/fake-module2/index.js'}
-));
+test('static node subpackage', babelTest, {
+	source: 'import mod from "@cfware/fake-module1";',
+	result: 'import mod from "./node_modules/@cfware/fake-module1/index.js";',
+	options: {filename: 'node_modules/@cfware/fake-module2/index.js'}
+});
 
-test('static node ignore specific subpackage', t => babelTest(t,
-	'import mod from "@cfware/fake-module1";',
-	'import mod from "../fake-module1/index.js";',
-	{
+test('static node ignore specific subpackage', babelTest, {
+	source: 'import mod from "@cfware/fake-module1";',
+	result: 'import mod from "../fake-module1/index.js";',
+	options: {
 		filename: 'node_modules/@cfware/fake-module2/index.js',
 		plugins: [[plugin, {
 			alwaysRootImport: ['@cfware/fake-module1']
 		}]]
 	}
-));
+});
 
-test('static node ignore specific subpackage from subdir', t => babelTest(t,
-	'import mod from "@cfware/fake-module1";',
-	'import mod from "../../fake-module1/index.js";',
-	{
+test('static node ignore specific subpackage from subdir', babelTest, {
+	source: 'import mod from "@cfware/fake-module1";',
+	result: 'import mod from "../../fake-module1/index.js";',
+	options: {
 		filename: 'node_modules/@cfware/fake-module2/subdir/index.js',
 		plugins: [[plugin, {
 			alwaysRootImport: ['@cfware/fake-module1']
 		}]]
 	}
-));
+});
 
-test('static node package to package', t => babelTest(t,
-	'import mod from "is-windows";',
-	'import mod from "../is-windows/index.js";',
-	{filename: 'node_modules/path-is-inside/index.js'}
-));
+test('static node package to package', babelTest, {
+	source: 'import mod from "is-windows";',
+	result: 'import mod from "../is-windows/index.js";',
+	options: {filename: 'node_modules/path-is-inside/index.js'}
+});
 
-test('static node package with alternate location', t => babelTest(t,
-	'import mod from "is-windows";',
-	'import mod from "/assets/is-windows/index.js";',
-	{plugins: [[plugin, {modulesDir: '/assets'}]]}
-));
+test('static node package with alternate location', babelTest, {
+	source: 'import mod from "is-windows";',
+	result: 'import mod from "/assets/is-windows/index.js";',
+	options: {plugins: [[plugin, {modulesDir: '/assets'}]]}
+});
 
-test('static node package to package with alternate location', t => babelTest(t,
-	'import mod from "is-windows";',
-	'import mod from "../is-windows/index.js";',
-	{
+test('static node package to package with alternate location', babelTest, {
+	source: 'import mod from "is-windows";',
+	result: 'import mod from "../is-windows/index.js";',
+	options: {
 		plugins: [[plugin, {modulesDir: '/assets'}]],
 		filename: 'node_modules/path-is-inside/index.js'
 	}
-));
+});
 
-test('static node package to package with absolute path', t => babelTest(t,
-	'import mod from "is-windows";',
-	`import mod from "${path.join(nodeModules, 'is-windows', 'index.js').replace(/\\/g, '\\\\')}";`,
-	{
+test('static node package to package with absolute path', babelTest, {
+	source: 'import mod from "is-windows";',
+	result: `import mod from "${path.join(nodeModules, 'is-windows', 'index.js').replace(/\\/g, '\\\\')}";`,
+	options: {
 		plugins: [[plugin, {modulesDir: nodeModules, fsPath: true}]],
 		filename: 'index.js'
 	}
-));
+});
 
-test('static node package to package with fsPath but no modulesDir specified', t => babelTest(t,
-	'import mod from "is-windows";',
-	`import mod from ".${(path.sep + path.join(nodeModulesRelative, 'is-windows', 'index.js')).replace(/\\/g, '\\\\')}";`,
-	{
+test('static node package to package with fsPath but no modulesDir specified', babelTest, {
+	source: 'import mod from "is-windows";',
+	result: `import mod from ".${(path.sep + path.join(nodeModulesRelative, 'is-windows', 'index.js')).replace(/\\/g, '\\\\')}";`,
+	options: {
 		plugins: [[plugin, {fsPath: true}]],
 		filename: 'index.js'
 	}
-));
+});
 
-test('static node package with full base URL, trailing slash', t => babelTest(t,
-	'import mod from "is-windows";',
-	'import mod from "https://example.com/node_modules/is-windows/index.js";',
-	{plugins: [[plugin, {modulesDir: 'https://example.com/node_modules/'}]]}
-));
+test('static node package with full base URL, trailing slash', babelTest, {
+	source: 'import mod from "is-windows";',
+	result: 'import mod from "https://example.com/node_modules/is-windows/index.js";',
+	options: {plugins: [[plugin, {modulesDir: 'https://example.com/node_modules/'}]]}
+});
 
-test('static node package with full base URL, no trailing slash', t => babelTest(t,
-	'import mod from "is-windows";',
-	'import mod from "https://example.com/node_modules/is-windows/index.js";',
-	{plugins: [[plugin, {modulesDir: 'https://example.com/node_modules'}]]}
-));
+test('static node package with full base URL, no trailing slash', babelTest, {
+	source: 'import mod from "is-windows";',
+	result: 'import mod from "https://example.com/node_modules/is-windows/index.js";',
+	options: {plugins: [[plugin, {modulesDir: 'https://example.com/node_modules'}]]}
+});
 
-test('static unresolved node package', t => babelTest(t,
-	'import mod from "@cfware/this-module-will-never-exist";',
-	'import mod from "@cfware/this-module-will-never-exist";',
-	{expectErrors: [[`Could not resolve '@cfware/this-module-will-never-exist' in file '${path.join(projectDir, 'file.js')}'.`]]}
-));
+test('static unresolved node package', babelTest, {
+	source: 'import mod from "@cfware/this-module-will-never-exist";',
+	result: 'import mod from "@cfware/this-module-will-never-exist";',
+	expectErrors: [
+		[`Could not resolve '@cfware/this-module-will-never-exist' in file '${path.join(projectDir, 'file.js')}'.`]
+	]
+});
 
-test('static unresolved node package, failOnUnresolved', t => babelTest(t,
-	'import mod from "@cfware/this-module-will-never-exist";',
-	'import mod from "@cfware/this-module-will-never-exist";',
-	{plugins: [[plugin, {failOnUnresolved: true}]]}
-));
+test('static unresolved node package, failOnUnresolved', babelTest, {
+	source: 'import mod from "@cfware/this-module-will-never-exist";',
+	result: 'import mod from "@cfware/this-module-will-never-exist";',
+	options: {plugins: [[plugin, {failOnUnresolved: true}]]}
+});
 
-test('static http url', t => babelTest(t,
-	'import mod from "http://example.com/";',
-	'import mod from "http://example.com/";'
-));
+test('static http url', babelTest, {
+	source: 'import mod from "http://example.com/";',
+	result: 'import mod from "http://example.com/";'
+});
 
-test('static current dir', t => babelTest(t,
-	'import mod from ".";',
-	'import mod from "./index.js";'
-));
+test('static current dir', babelTest, {
+	source: 'import mod from ".";',
+	result: 'import mod from "./index.js";'
+});
 
-test('static parent dir', t => babelTest(t,
-	'import mod from "..";',
-	'import mod from "../index.js";',
-	{filename: 'test/test.js'}
-));
+test('static parent dir', babelTest, {
+	source: 'import mod from "..";',
+	result: 'import mod from "../index.js";',
+	options: {filename: 'test/test.js'}
+});
 
-test('static ignored path', t => babelTest(t,
-	'import mod from "..";\nimport mod2 from "/src/test.js";',
-	'import mod from "../index.js";\nimport mod2 from "/src/test.js";',
-	{
+test('static ignored path', babelTest, {
+	source: 'import mod from "..";\nimport mod2 from "/src/test.js";',
+	result: 'import mod from "../index.js";\nimport mod2 from "/src/test.js";',
+	options: {
 		filename: 'test/test.js',
 		plugins: [[plugin, {
 			ignorePrefixes: ['/']
 		}]]
 	}
-));
+});
 
-test('export without from', t => babelTest(t,
-	'export const id = "id".length();',
-	'export const id = "id".length();'
-));
+test('export without from', babelTest, {
+	source: 'export const id = "id".length();',
+	result: 'export const id = "id".length();'
+});
 
-test('dynamic current dir', t => babelTest(t,
-	'const mod = import(".");',
-	'const mod = import("./index.js");'
-));
+test('dynamic current dir', babelTest, {
+	source: 'const mod = import(".");',
+	result: 'const mod = import("./index.js");'
+});
 
-test('dynamic parent dir', t => babelTest(t,
-	'const mod = import("..");',
-	'const mod = import("../index.js");',
-	{filename: 'test/test.js'}
-));
+test('dynamic parent dir', babelTest, {
+	source: 'const mod = import("..");',
+	result: 'const mod = import("../index.js");',
+	options: {filename: 'test/test.js'}
+});
 
-test('dynamic unresolved node package, failOnUnresolved', t => babelTest(t,
-	'import("@cfware/this-module-will-never-exist");',
-	'import("@cfware/this-module-will-never-exist");',
-	{plugins: [[plugin, {failOnUnresolved: true}]]}
-));
+test('dynamic unresolved node package, failOnUnresolved', babelTest, {
+	source: 'import("@cfware/this-module-will-never-exist");',
+	result: 'import("@cfware/this-module-will-never-exist");',
+	options: {plugins: [[plugin, {failOnUnresolved: true}]]}
+});
 
-test('dynamic invalid', t => babelTest(t,
-	'const mod = import(1);',
-	'const mod = import(1);'
-));
+test('dynamic invalid', babelTest, {
+	source: 'const mod = import(1);',
+	result: 'const mod = import(1);'
+});

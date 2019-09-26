@@ -100,7 +100,7 @@ function tryResolve(babelPath, importPath, sourceFileName, pluginOptions) {
 		}
 
 		return importPathRel;
-	} catch (error) {
+	} catch (_) {
 		if (pluginOptions.failOnUnresolved) {
 			throw babelPath.buildCodeFrameError(`Could not resolve '${importPath}'.`);
 		} else {
