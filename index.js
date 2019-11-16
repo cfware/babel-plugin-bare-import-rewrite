@@ -108,9 +108,9 @@ function tryResolve(babelPath, importPath, sourceFileName, pluginOptions) {
 	}
 }
 
-module.exports = ({types: t}) => ({
-	visitor: {
-		CallExpression(path, {file, opts}) {
+function getVisitor(t, opts) {
+	const visitor = {
+		CallExpression(path, {file}) {
 			if (path.node.callee.type !== 'Import') {
 				return;
 			}
@@ -123,7 +123,7 @@ module.exports = ({types: t}) => ({
 
 			source.replaceWith(t.stringLiteral(tryResolve(path, source.node.value, file.opts.parserOpts.sourceFileName, opts)));
 		},
-		'ImportDeclaration|ExportNamedDeclaration|ExportAllDeclaration'(path, {file, opts}) {
+		'ImportDeclaration|ExportNamedDeclaration|ExportAllDeclaration'(path, {file}) {
 			const source = path.get('source');
 
 			// An export without a 'from' clause
@@ -133,6 +133,22 @@ module.exports = ({types: t}) => ({
 
 			source.replaceWith(t.stringLiteral(tryResolve(path, source.node.value, file.opts.parserOpts.sourceFileName, opts)));
 		}
+	};
+
+	if (!opts.processAtProgramExit) {
+		return visitor;
 	}
+
+	return {
+		Program: {
+			exit(path, state) {
+				path.traverse(visitor, state);
+			}
+		}
+	};
+}
+
+module.exports = ({types: t}, opts) => ({
+	visitor: getVisitor(t, opts)
 });
 module.exports.resolve = absResolve;

@@ -37,6 +37,21 @@ async function babelTest(t, {source, result, options = {}, expectErrors = []}) {
 
 const test = (name, helper, ...args) => t.test(name, t => helper(t, ...args));
 
+const pluginInjectFakeModuleAtExit = ({types: t}) => ({
+	visitor: {
+		Program: {
+			exit(path) {
+				path.node.body.unshift(
+					t.importDeclaration(
+						[t.importDefaultSpecifier(t.identifier('mod'))],
+						t.stringLiteral('@cfware/fake-module1')
+					)
+				);
+			}
+		}
+	}
+});
+
 t.test('exports', async t => {
 	t.type(plugin, 'function');
 	t.type(plugin.resolve, 'function');
@@ -78,6 +93,28 @@ t.test('absolute resolve', async t => {
 	t.equal(plugin.resolve('is-windows', fakeModule2, {alwaysRootImport: ['@cfware/fake-module1']}), isWindowsSub);
 	t.equal(plugin.resolve('is-windows', fakeModule2, {alwaysRootImport: ['is-windows']}), isWindows);
 	t.equal(plugin.resolve('is-windows', fakeModule2, {alwaysRootImport: ['**']}), isWindows);
+});
+
+test('import injected by another plugins Program.exit ignored by default', babelTest, {
+	source: '',
+	result: 'import mod from "@cfware/fake-module1";',
+	options: {
+		plugins: [
+			plugin,
+			pluginInjectFakeModuleAtExit
+		]
+	}
+});
+
+test('import injected by another plugins Program.exit seen with processAtProgramExit', babelTest, {
+	source: '',
+	result: 'import mod from "./node_modules/@cfware/fake-module1/index.js";',
+	options: {
+		plugins: [
+			pluginInjectFakeModuleAtExit,
+			[plugin, {processAtProgramExit: true}]
+		]
+	}
 });
 
 test('static node package', babelTest, {

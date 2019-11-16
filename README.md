@@ -33,7 +33,8 @@ Add `bare-import-rewrite` to `plugins` in your babel settings.
 			"alwaysRootImport": [],
 			"ignorePrefixes": ["//"],
 			"failOnUnresolved": false,
-			"resolveDirectories": ["node_modules"]
+			"resolveDirectories": ["node_modules"],
+			"processAtProgramExit": false
 		}]
 	]
 }
@@ -104,6 +105,11 @@ to be ignored.
 ### extensions
 
 A list of extensions to use in resolver. Default `['.mjs', '.js', '.json']`.
+
+### processAtProgramExit
+
+This causes processing to occur during the babel `Program.exit` visitor.  In general
+this option is not needed.
 
 ### `.resolve(importModule, sourceFileName, pluginOptions)` - Resolve absolute path.
 
