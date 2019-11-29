@@ -1,11 +1,4 @@
-os:
-  - linux
-  - osx
-  - windows
-
-language: node_js
-
-node_js:
-  - 12
-  - 10
-  - 8
+version: ~> 1.0
+import:
+  - cfware/travis-ci:node-supported.yml
+  - cfware/travis-ci:os-all.yml
