@@ -53,6 +53,7 @@ function absResolve(importPath, sourceFileName, pluginOptions = {}) {
 		basedir: basedirResolve(importPath, sourceFileName, pluginOptions),
 		extensions: pluginOptions.extensions || ['.mjs', '.js', 'json'],
 		moduleDirectory: pluginOptions.resolveDirectories || 'node_modules',
+		preserveSymlinks: pluginOptions.preserveSymlinks !== false,
 		packageFilter(packageJson) {
 			packageJson.main = packageJson.module ||
 				packageJson['jsnext:main'] || packageJson.main;
