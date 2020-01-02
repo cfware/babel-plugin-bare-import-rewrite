@@ -31,7 +31,7 @@
 		"minimatch": "^3.0.4",
 		"path-is-inside": "^1.0.2",
 		"resolve": "^1.11.1",
-		"whatwg-url": "^7.0.0"
+		"whatwg-url": "^8.0.0"
 	},
 	"peerDependencies": {
 		"@babel/core": "^7.4.5"
