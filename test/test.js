@@ -1,13 +1,13 @@
-import path from 'path';
-import test from 'ava';
-import {transform} from '@babel/core';
-import plugin from '../index.js';
+const path = require('path');
+const t = require('tap');
+const {transform} = require('@babel/core');
+const plugin = require('../index.js');
 
 const projectDir = path.resolve(__dirname, '..');
 const nodeModules = path.resolve(projectDir, 'node_modules');
 const nodeModulesRelative = path.join('.', 'node_modules');
 
-function babelTest(t, {source, result, options = {}, expectErrors = []}) {
+async function babelTest(t, {source, result, options = {}, expectErrors = []}) {
 	const origError = console.error;
 	const gotErrors = [];
 
@@ -22,12 +22,12 @@ function babelTest(t, {source, result, options = {}, expectErrors = []}) {
 			...options
 		});
 
-		t.deepEqual(gotErrors, expectErrors);
-		t.is(code, result);
+		t.same(gotErrors, expectErrors);
+		t.equal(code, result);
 		console.error = origError;
 	} catch (error) {
 		if (options.plugins[0][1].failOnUnresolved) {
-			t.true(error instanceof Error);
+			t.type(error, Error);
 			return;
 		}
 
@@ -35,12 +35,14 @@ function babelTest(t, {source, result, options = {}, expectErrors = []}) {
 	}
 }
 
-test('exports', t => {
-	t.is(typeof plugin, 'function');
-	t.is(typeof plugin.resolve, 'function');
+const test = (name, helper, ...args) => t.test(name, t => helper(t, ...args));
+
+t.test('exports', async t => {
+	t.type(plugin, 'function');
+	t.type(plugin.resolve, 'function');
 });
 
-test('absolute resolve', t => {
+t.test('absolute resolve', async t => {
 	const rootIndex = path.resolve(projectDir, 'index.js');
 	const fakeModule1 = path.join(projectDir, 'node_modules/@cfware/fake-module1/index.js');
 	const fakeModule2 = path.join(projectDir, 'node_modules/@cfware/fake-module2/index.js');
@@ -49,33 +51,33 @@ test('absolute resolve', t => {
 	const isWindows = require.resolve('is-windows');
 
 	/* URL's untouched */
-	t.is(plugin.resolve('http://example.com/', rootIndex), 'http://example.com/');
+	t.equal(plugin.resolve('http://example.com/', rootIndex), 'http://example.com/');
 
 	/* Find modules from root index.js */
-	t.is(plugin.resolve('./test/test.js', rootIndex), path.resolve(projectDir, 'test', 'test.js'));
-	t.is(plugin.resolve('@cfware/fake-module1', rootIndex), fakeModule1);
-	t.is(plugin.resolve('@cfware/fake-module2', rootIndex), fakeModule2);
+	t.equal(plugin.resolve('./test/test.js', rootIndex), path.resolve(projectDir, 'test', 'test.js'));
+	t.equal(plugin.resolve('@cfware/fake-module1', rootIndex), fakeModule1);
+	t.equal(plugin.resolve('@cfware/fake-module2', rootIndex), fakeModule2);
 
 	/* Find submodule */
-	t.is(plugin.resolve('@cfware/fake-module1', fakeModule2), fakeSubModule1);
+	t.equal(plugin.resolve('@cfware/fake-module1', fakeModule2), fakeSubModule1);
 
 	/* Avoid submodule */
-	t.is(plugin.resolve('@cfware/fake-module1', fakeModule2, {alwaysRootImport: ['@cfware/fake-module1']}), fakeModule1);
-	t.is(plugin.resolve('@cfware/fake-module1', fakeModule2, {alwaysRootImport: ['**']}), fakeModule1);
+	t.equal(plugin.resolve('@cfware/fake-module1', fakeModule2, {alwaysRootImport: ['@cfware/fake-module1']}), fakeModule1);
+	t.equal(plugin.resolve('@cfware/fake-module1', fakeModule2, {alwaysRootImport: ['**']}), fakeModule1);
 
 	/* Avoid submodules all except */
-	t.is(plugin.resolve('@cfware/fake-module1', fakeModule2, {
+	t.equal(plugin.resolve('@cfware/fake-module1', fakeModule2, {
 		alwaysRootImport: ['**'],
 		neverRootImport: ['@cfware/fake-module1']
 	}), fakeSubModule1);
 
 	/* Avoid non-empty submodule list but not matching import */
-	t.is(plugin.resolve('@cfware/fake-module1', fakeModule2, {alwaysRootImport: ['@cfware/fake-module3']}), fakeSubModule1);
+	t.equal(plugin.resolve('@cfware/fake-module1', fakeModule2, {alwaysRootImport: ['@cfware/fake-module3']}), fakeSubModule1);
 
 	/* Non-scoped module */
-	t.is(plugin.resolve('is-windows', fakeModule2, {alwaysRootImport: ['@cfware/fake-module1']}), isWindowsSub);
-	t.is(plugin.resolve('is-windows', fakeModule2, {alwaysRootImport: ['is-windows']}), isWindows);
-	t.is(plugin.resolve('is-windows', fakeModule2, {alwaysRootImport: ['**']}), isWindows);
+	t.equal(plugin.resolve('is-windows', fakeModule2, {alwaysRootImport: ['@cfware/fake-module1']}), isWindowsSub);
+	t.equal(plugin.resolve('is-windows', fakeModule2, {alwaysRootImport: ['is-windows']}), isWindows);
+	t.equal(plugin.resolve('is-windows', fakeModule2, {alwaysRootImport: ['**']}), isWindows);
 });
 
 test('static node package', babelTest, {

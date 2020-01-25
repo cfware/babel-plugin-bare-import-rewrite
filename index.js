@@ -2,12 +2,10 @@
 
 const path = require('path');
 
-const syntax = require('@babel/plugin-syntax-dynamic-import');
 const whatwgUrl = require('whatwg-url');
 const resolve = require('resolve');
 const pathIsInside = require('path-is-inside');
 const minimatch = require('minimatch');
-const arrify = require('arrify');
 
 const isPathSpecifier = str => /^\.{0,2}[/\\]/.test(str);
 const pathToURL = str => {
@@ -68,7 +66,7 @@ function tryResolve(babelPath, importPath, sourceFileName, pluginOptions) {
 		return importPath;
 	}
 
-	if (arrify(pluginOptions.ignorePrefixes).some(ignore => importPath.startsWith(ignore))) {
+	if ([].concat(pluginOptions.ignorePrefixes).some(ignore => importPath.startsWith(ignore))) {
 		return importPath;
 	}
 
@@ -111,7 +109,6 @@ function tryResolve(babelPath, importPath, sourceFileName, pluginOptions) {
 }
 
 module.exports = ({types: t}) => ({
-	inherits: syntax.default,
 	visitor: {
 		CallExpression(path, {file, opts}) {
 			if (path.node.callee.type !== 'Import') {

@@ -1,8 +1,8 @@
 *.tgz
 coverage
 .nyc_output
-nyc.config.js
 package
+.taprc
 .travis.yml
 fixtures
 test
