@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/cfware/babel-plugin-bare-import-rewrite/compare/v1.5.1...v2.0.0) (2020-01-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* bump requirement to node.js 10.13.0
+* The `modulesDir` no longer defaults to `/node_modules`.
+
+### Features
+
+* Add preserveSymlinks option ([eb4b2b4](https://github.com/cfware/babel-plugin-bare-import-rewrite/commit/eb4b2b451f157e3123a49cf9c739390ccfe27ad6)), closes [#23](https://github.com/cfware/babel-plugin-bare-import-rewrite/issues/23)
+* bump requirement to node.js 10.13.0 ([8dbab86](https://github.com/cfware/babel-plugin-bare-import-rewrite/commit/8dbab868fd7a4bb34c162071e1e9ca26545bace4))
+* Create processAtProgramExit option ([#30](https://github.com/cfware/babel-plugin-bare-import-rewrite/issues/30)) ([ad99be5](https://github.com/cfware/babel-plugin-bare-import-rewrite/commit/ad99be55f15896277d8b85c05bddf63528f8439b)), closes [#26](https://github.com/cfware/babel-plugin-bare-import-rewrite/issues/26)
+* Use relative path to node_modules by default ([#22](https://github.com/cfware/babel-plugin-bare-import-rewrite/issues/22)) ([f9eaf0e](https://github.com/cfware/babel-plugin-bare-import-rewrite/commit/f9eaf0e10c4c16ab8578baf335908eb213757552))
+
+
+### Bug Fixes
+
+* modulesDir default should be absolute FS path when fsPath is enabled ([6f299bc](https://github.com/cfware/babel-plugin-bare-import-rewrite/commit/6f299bc31dc9c2f0341d3ccf8295631ef88b957c))
+
 ### [1.5.1](https://github.com/cfware/babel-plugin-bare-import-rewrite/compare/v1.5.0...v1.5.1) (2019-06-06)
 
 
