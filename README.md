@@ -12,7 +12,7 @@ about the proposal.
 
 ## Install babel-plugin-bare-import-rewrite
 
-This module requires node.js 8 or above and `@babel/core`.
+This module requires node.js 10 or above and `@babel/core`.
 
 ```sh
 npm i babel-plugin-bare-import-rewrite
