@@ -43,7 +43,7 @@
 		"is-windows": "^1.0.2",
 		"standard-version": "^7.1.0",
 		"tap": "^14.10.6",
-		"xo": "^0.25.3"
+		"xo": "^0.26.0"
 	},
 	"xo": {
 		"extends": "@cfware/eslint-config-node"
