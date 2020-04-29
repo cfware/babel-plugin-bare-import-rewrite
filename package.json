@@ -36,7 +36,7 @@
 		"@babel/core": "^7.8.3"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.8.3",
+		"@babel/core": "^7.9.6",
 		"@cfware/eslint-config-node": "^0.1.1",
 		"@cfware/fake-module1": "file:fixtures/packages/fake-module1@2",
 		"@cfware/fake-module2": "file:fixtures/packages/fake-module2",
