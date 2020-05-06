@@ -41,7 +41,7 @@
 		"@cfware/fake-module1": "file:fixtures/packages/fake-module1@2",
 		"@cfware/fake-module2": "file:fixtures/packages/fake-module2",
 		"is-windows": "^1.0.2",
-		"standard-version": "^7.1.0",
+		"standard-version": "^8.0.0",
 		"tap": "^14.10.6",
 		"xo": "^0.26.0"
 	},
